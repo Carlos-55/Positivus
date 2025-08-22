@@ -1,0 +1,34 @@
+{
+  "applicantInstitutionId": "74b2a5eb-fabe-48af-98a5-e72a10c69eaa",
+  "participants": [
+    {
+      "id": "signer-1",
+      "firstName": "Carlos Bayardo",
+      "lastName": "Olmos Garcia",
+      "securityKey": "securityKey",
+      "email": "carlosbayardo.olmos.contractor1@bbva.com",
+      "phoneNumber": "525573859100",
+      "signType": "EMBEDDED",
+      "signOrder": 1,
+      "role": "SIGNER",
+      "hasPersonalCertificateAuthority": true
+    }
+  ],
+  "files": [
+    {
+      "id": "documento_1",
+      "fileName": "documento_1.pdf",
+      "signatures": [
+        {
+          "id": "idSign1",
+          "signerId": "signer-1",
+          "signPositions": [
+            {
+              "anchor": "Firma_1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
