@@ -1,32 +1,429 @@
 ---
-import PDF from '../../assets/data_signature/documento_1.pdf';
+import PDF from "../../assets/data_signature/documento_1.pdf";
 ---
 
 <div>
-    <p class="text-bold text-xl" >Firma simple</p>
-    <div>
-        <p>En esta sección se podrá probar la firma simple.</p>
-        <div>
+    <p class="text-bold text-xl">Firma simple</p>
+    <!-- div con dos columnas  -->
+    <p>En esta sección se podrá probar la firma simple.</p>
+    <br />
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- <div class="space-y-4 h-100 overflow-auto p-3">
             <h3>Preview del PDF</h3>
-            <div style="height: 500px;">
-                <iframe src={PDF + '#page=1&zoom=100'} width="100%" height="100%"></iframe>
+            <div
+                class="h-[500px] border border-gray-300 rounded-lg overflow-hidden"
+            >
+                <iframe
+                    src={PDF + "#page=1&zoom=100"}
+                    width="100%"
+                    height="100%"></iframe>
             </div>
         </div>
-        <div class="mt-6">
+        <div class="space-y-4 h-100 overflow-auto p-3">
             <h3>Estructura del JSON</h3>
-            <!-- Dale un estilo amigable a este json para que sea mas sencilla la lectura -->
-            <!-- <pre id="json-signature"></pre> -->
-            <div class="mt-4">
-                <pre id="json-signature" class="whitespace-pre-wrap break-words p-4 bg-gray-100 rounded-lg text-sm text-gray-800"></pre>
+            <div
+                class="h-[500px] border border-gray-300 rounded-lg overflow-auto"
+            >
+                <pre
+                    id="json-signature"
+                    class="whitespace-pre-wrap break-words p-4 bg-gray-100 rounded-lg text-sm text-gray-800">
+                </pre>
+            </div>
+        </div> -->
+
+        <!-- boton para ejecutar una prueba -->
+        <div class="col-span-1 md:col-span-2 flex justify-center mt-4 form">
+            <div class="flex justify-center mt-8 p-4 md:p-8">
+                <div
+                    class="bg-white p-6 md:p-8 rounded-lg shadow-xl w-full max-w-lg"
+                >
+                    <h2
+                        class="text-2xl font-bold text-center text-gray-800 mb-4"
+                    >
+                        Validación de Firma Digital
+                    </h2>
+                    <p class="text-gray-600 text-center mb-6">
+                        Con esta prueba, validaremos la firma de un documento.
+                        Este proceso es un paso clave para facilitar el
+                        desarrollo y la integración en proyectos futuros.
+                    </p>
+
+                    <div class="mb-6">
+                        <p class="text-sm text-gray-500 mb-2">
+                            Ingresa un token válido para autenticar tu solicitud
+                            de forma segura.
+                        </p>
+                        <input
+                            type="text"
+                            id="token-input"
+                            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                            placeholder="Ingresa el token JWT aquí"
+                        />
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                        <button
+                            id="test-button"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        >
+                            Ejecutar prueba de firma
+                        </button>
+                        <div id="loader" class="mt-4"></div>
+                        <div id="message" class="m-4"></div>
+                    </div>
+
+                    <div class="mt-6">
+                        <p class="text-sm text-gray-500 text-center">
+                            Al ejecutar esta prueba, se generará una **ceremonia
+                            de firma** que le dará validez y autenticidad al
+                            documento.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+            class="table-participants col-span-1 md:col-span-2 overflow-x-auto"
+        >
+            <!-- 
+                    Mostrar estos datos en la tabla de participantes:
+                    id
+                    firstName
+                    lastName
+                    email
+                    signType
+                    status
+                    role
+                    url
+                    _createdAt
+                -->
+            <table
+                id="participants-table"
+                class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg border-collapse"
+            >
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th
+                            class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        >
+                            ID
+                        </th>
+                        <th
+                            class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        >
+                            Nombre
+                        </th>
+                        <th
+                            class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        >
+                            Apellido
+                        </th>
+                        <th
+                            class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        >
+                            Email
+                        </th>
+                        <th
+                            class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        >
+                            Tipo de Firma
+                        </th>
+                        <th
+                            class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        >
+                            Estado
+                        </th>
+                        <th
+                            class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        >
+                            Rol
+                        </th>
+                        <th
+                            class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        >
+                            URL
+                        </th>
+                        <th
+                            class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                        >
+                            Creado El
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="participants-tbody" class="divide-y divide-gray-200">
+                </tbody>
+            </table>
+        </div>
+        <div
+            class="col-span-1 md:col-span-2 mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400"
+        >
+            <p class="text-sm text-gray-500">
+                Nota: Esta es una prueba de concepto y no debe usarse en
+                producción.
+            </p>
+
+            <div id="response-success" class="hidden">
+                <h3 class="mt-4">Respuesta Exitosa:</h3>
+                <pre
+                    id="json-response-success"
+                    class="whitespace-pre-wrap break-words p-4 bg-green-100 rounded-lg text-sm text-gray-800">
+                </pre>
             </div>
         </div>
     </div>
+
+    <script>
+        import JSONData from "../../assets/data_signature/1F_1D.json";
+        import PDF from "../../assets/data_signature/documento_1.pdf";
+        const jsonSignature = {};
+        Object.assign(jsonSignature, JSONData);
+
+        const myButton: any = document.getElementById("test-button");
+        myButton.addEventListener("click", handleClick);
+
+        async function handleClick() {
+            console.log("Button was clicked!");
+            // eyJhbGciOiJSUzI1NiIsImtpZCI6IkNOPUV0aGVyIFIzIEVTIElzc3VpbmcgQ0EsT1U9U2VjdXJpdHkgQXJjaGl0ZWN0dXJlIENyeXB0b2dyYXBoeSxPPUJCVkEsQz1FUzo6MTcxODYyMjQ1NTg4NTA4ODczMCIsInR5cCI6IkpXVCIsIngtcmhvLXRyYWNlaWQiOiJhNDhmZjM1YTc1YmZjMjk0NjllNGQzYWQxODk0NWZhNiIsIng1dSI6Imh0dHBzOi8vcG9ydHVudXMuY2VudHJhbC0wMS5uZXh0Z2VuLmlncnVwb2JidmEvdjEvY2VydC9zaWduZXIifQ.eyJhdWQiOlsiRUNTS2VybmVsIl0sImJjc0FjTG9naW4iOiIiLCJiY3NBcHBEYXRhIjoiIiwiYmNzVXNlcklkIjoiWE1GMjg0MyIsImVjc01ldGEiOnsiZ2VvZ3JhcGh5Ijoid2ViIiwiZ2lhbSI6eyJncm91cHMiOlsiVUFfTUNSVF9NRVhfRGV2ZWxvcGVycyIsIlVBX01DUlRfRGV2ZWxvcGVycyIsIlVBX01DVERfTUVYX0RldmVsb3BlcnMiLCJVQV9NQ1REX0RldmVsb3BlcnMiLCJFdGhlcl9EZXZlbG9wZXJzX0JCVkFfTWV4aWNvIiwiRXRoZXJfRGV2ZWxvcGVycyIsIlVBX01DQ0lfTUVYX0RldmVsb3BlcnMiLCJVQV9NQ0NJX0RldmVsb3BlcnMiLCJFQ1NfYXNvX2RldmVsb3BlcnNfbXgiLCJFQ1NfbHJhX2RlZmF1bHRfZ2wiLCJFQ1NfZWNzX2RhdGFleHRlbmRlZF9wdWJsaWNfZ2wiLCJFQ1NfdmRjX29ic2VydmFiaWxpdHlfZ2wiLCJVQV9NVERJX01FWF9EZXZlbG9wZXJzIiwiVUFfTVRESV9EZXZlbG9wZXJzIiwiVUFfTUdSUl9NRVhfRGV2ZWxvcGVycyIsIlVBX01HUlJfRGV2ZWxvcGVycyIsIlVBX0JJWThfTUVYX0RldmVsb3BlcnMiLCJVQV9CSVk4X0RldmVsb3BlcnMiXX19LCJleHAiOjE3NTYxNjUwMjgsImlhdCI6MTc1NjE1MDYyOCwiaXNzIjoiU0VDYWFTIiwianRpIjoiOWUzOGYyOTctNTkyMS00ZjVkLWFhOWUtOTQwNTM5MjRkNjFkIiwibmJmIjoxNzU2MTUwNjI4LCJzdWIiOiJYTUYyODQzIn0.QJ6GJY6KDRvg-k7rNhHi3CyfQGjOKOpcyL08CTYM67KIBo5DOSxD1MGr7eFcdYBiWfjPy7qHgHSyjg3RVckpUZvfk-23beoPhIHFPK8UAIpKL1YWdJpMEMoBVEp0q9i1smx-rVq_wYZSEFf5uiEyttUX_Ofy1zNVR-Yu5dpcR44LrCWYokd9SG9EbTuvvL24irRW7UO_wUaKm3pooJdw7siCszDu_94c36Guag7EzLZUzKHyPkQzk1bTfr2m2BJVb4b5AmwmoaZMJw19Qm-7bXlGHOaXSU4zyHmE0WYLlMgKNRnRuyOAXLg6YVe72qj_3WifRioQAsmGKN-xYdpTvA
+            const token: string = (
+                document.getElementById("token-input") as HTMLInputElement
+            ).value;
+            if (!token) {
+                alert("Por favor, ingresa un token válido.");
+                return;
+            }
+            const url: string =
+                "https://signature-process.work-02.ether.igrupobbva/signature-process/v1/ns/user.xmf2843/envelopes";
+
+            const headers = {
+                Authorization: `Bearer ${token}`,
+                "Access-Control-Allow-Origin": "*",
+                ConsumerRequestId: "transactionId",
+                "ECS-Signature-Platform-Use-Case": "onespanCloud_general",
+                Accept: "application/json",
+            };
+            const formData = new FormData();
+            const jsonBlob = new Blob([JSON.stringify(jsonSignature)], {
+                type: "application/json",
+            });
+            formData.append("data", jsonBlob, "data.json");
+            const pdfBlob = await fetch(PDF).then((res) => res.blob());
+            formData.append("files", pdfBlob, "documento_1.pdf");
+            // iniciar el loader
+            const loader = document.getElementById("loader");
+            if (loader) {
+                loader.style.display = "block";
+                // eliminar el texto de exito si existe
+                const messageDiv = document.getElementById("message");
+                if (messageDiv) {
+                    messageDiv.innerHTML = "";
+                }
+            }
+            fetch(url, {
+                method: "POST",
+                headers: headers,
+                body: formData,
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        document.getElementById("loader")!.style.display =
+                            "none"; // Ocultar el loader
+                        const errorMsg = `HTTP error! status: ${response.status} - ${response.statusText}`;
+                        document.getElementById("message")!.innerHTML =
+                            `<p class="text-red-600 font-bold">Error al generar la ceremonia de firma: ${errorMsg}</p>`;
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log("Success:", data);
+                    // agregar al div loader un texto de exito al generar la ceremonia de firma
+                    if (loader) {
+                        loader.style.display = "none";
+                        const messageDiv = document.getElementById("message");
+                        if (messageDiv) {
+                            messageDiv.innerHTML =
+                                '<p class="text-green-600 font-bold">Ceremonia de firma generada con éxito.</p>';
+                        }
+                    }
+
+                    const participantsUrl = `https://signature-process.work-02.ether.igrupobbva/signature-process/v1/ns/user.xmf2843/envelopes/${data.data.id}/participants`;
+                    // inicia nuevamente el loader
+                    document.getElementById("loader")!.style.display =
+                        "block";
+                    // cambiar el mensaje de exito por uno de carga
+                    document.getElementById("message")!.innerHTML =
+                        "<p>Obteniendo participantes...</p>";
+                    fetch(participantsUrl, {
+                        method: "GET",
+                        headers: headers,
+                    })
+                        .then((response) => {
+                            if (!response.ok) {
+                                // loader stop
+                                document.getElementById(
+                                    "loader",
+                                )!.style.display = "none"; // Ocultar el loader
+                                const errorMsg = `HTTP error! status: ${response.status} - ${response.statusText}`;
+                                document.getElementById("message")!.innerHTML =
+                                    `<p class="text-red-600 font-bold">Error al obtener los participantes: ${errorMsg}</p>`;
+                            }
+                            document.getElementById("loader")!.style.display =
+                                "none"; // Ocultar el loader
+                                document.getElementById("message")!.innerHTML =
+                                `<p class="text-green-600 font-bold">Participantes obtenidos con éxito.</p>`;
+                            return response.json();
+                        })
+                        .then((participantsData) => {
+                            console.log(
+                                "Participants Success:",
+                                participantsData,
+                            );
+                            document.getElementById("message")!.innerHTML =
+                                `<p class="text-green-600 font-bold">Participantes obtenidos con éxito.</p>`;
+                            console.log(
+                                participantsData.data,
+                                "Datos de participantes",
+                            );
+                            const participants: IParticipants[] =
+                                participantsData.data;
+                            renderParticipants(participants);
+                        })
+                        .catch((error) => {
+                            console.error("Participants Error:", error);
+                            document.getElementById("message")!.innerHTML =
+                                `<p class="text-red-600 font-bold">Error al obtener los participantes. Revisa la consola para más detalles.</p>`;
+                            document.getElementById("loader")!.style.display =
+                                "none"; // Ocultar el loader
+                        });
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    document.getElementById("message")!.innerHTML =
+                        `<p class="text-red-600 font-bold">Error al generar la ceremonia de firma. Revisa la consola para más detalles.</p>`;
+                    if (loader) {
+                        loader.style.display = "none"; // Ocultar el loader
+                    }
+                });
+            const messageDiv = document.getElementById("message");
+            if (messageDiv) {
+                messageDiv.innerHTML = "<p>Procesando...</p>";
+            }
+        }
+
+        function renderParticipants(data: IParticipants[]) {
+            const tableBody: any = document.getElementById("participants-tbody");
+            tableBody.innerHTML = ""; // Limpia la tabla antes de añadir nuevas filas
+
+            data.forEach((participant) => {
+                // Crea una nueva fila
+                const row = document.createElement("tr");
+                // Añade una clase para el efecto hover
+                row.classList.add("hover:bg-gray-50");
+
+                // Crea la celda para el ID
+                const idCell = document.createElement("td");
+                idCell.classList.add("py-4", "px-4", "font-medium");
+                idCell.textContent = participant.id;
+                row.appendChild(idCell);
+
+                // Crea las celdas para los demás datos
+                const nameCell = document.createElement("td");
+                nameCell.classList.add("py-4", "px-4");
+                nameCell.textContent = participant.firstName;
+                row.appendChild(nameCell);
+
+                const lastNameCell = document.createElement("td");
+                lastNameCell.classList.add("py-4", "px-4");
+                lastNameCell.textContent = participant.lastName;
+                row.appendChild(lastNameCell);
+
+                const emailCell = document.createElement("td");
+                emailCell.classList.add("py-4", "px-4");
+                emailCell.textContent = participant.email;
+                row.appendChild(emailCell);
+
+                const signatureTypeCell = document.createElement("td");
+                signatureTypeCell.classList.add("py-4", "px-4");
+                signatureTypeCell.textContent = participant.signType;
+                row.appendChild(signatureTypeCell);
+
+                const statusCell = document.createElement("td");
+                statusCell.classList.add("py-4", "px-4");
+                statusCell.textContent = participant.status;
+                row.appendChild(statusCell);
+
+                const roleCell = document.createElement("td");
+                roleCell.classList.add("py-4", "px-4");
+                roleCell.textContent = participant.role;
+                row.appendChild(roleCell);
+
+                // --- Celda de URL con enlace ---
+                const urlCell = document.createElement("td");
+                urlCell.classList.add("py-4", "px-4", "text-sm");
+
+                const urlLink = document.createElement("a");
+                urlLink.href = participant.url;
+                urlLink.textContent = "Ver Documento"; // O puedes usar la URL completa: participant.url
+                urlLink.target = "_blank"; // Abrirá el enlace en una nueva pestaña
+                urlLink.rel = "noopener noreferrer"; // Práctica de seguridad recomendada
+                // Estilos para el enlace con Tailwind
+                urlLink.classList.add("text-blue-600", "hover:underline");
+
+                urlCell.appendChild(urlLink);
+                row.appendChild(urlCell);
+                // --- Fin de celda de URL ---
+
+                const createdAtCell = document.createElement("td");
+                createdAtCell.classList.add("py-4", "px-4");
+                createdAtCell.textContent = participant._createdAt
+                    ? new Date(participant._createdAt).toLocaleString()
+                    : "N/A";
+                row.appendChild(createdAtCell);
+
+                // Añade la fila completa a la tabla
+                tableBody.appendChild(row);
+            });
+        }
+
+        export interface IParticipants {
+            id: string;
+            firstName: string;
+            lastName: string;
+            email: string;
+            signType: string;
+            signOrder: number;
+            status: string;
+            role: string;
+            hasPersonalCertificateAuthority: boolean;
+            url: string;
+            _ac: boolean;
+            _createdAt: Date;
+            _createdBy: string;
+            _id: string;
+            _locator: string;
+            _updatedAt: Date;
+            _parent: string;
+            _type: string;
+        }
+    </script>
 </div>
+<style>
+    /* Estilos para el loader */
+    #loader {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 2s linear infinite;
+        display: none; /* Oculto por defecto */
+    }
 
-<script>
-    import JSONData from '../../assets/data_signature/1F_1D.json';
-
-    const jsonSignature = {};
-    Object.assign(jsonSignature, JSONData);
-    document.getElementById('json-signature')!.textContent = JSON.stringify(jsonSignature, null, 2);
-</script>
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
